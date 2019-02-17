@@ -73,7 +73,7 @@ func _process(delta):
 	
 	# When left mouse is released call WorldManager.area_selected()
 	if Input.is_action_just_released("ui_left_mouse_button"):
-		if startV.distance_to(mousePos) > 20:
+		if startV.distance_to(mousePos) >= 0:
 			end = mousePosGlobal
 			endV = mousePos
 			isDragging = false
