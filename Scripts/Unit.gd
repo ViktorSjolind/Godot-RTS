@@ -5,6 +5,12 @@ onready var box = $Box
 onready var label = $Name
 onready var bar = $Bar 
 
+export var speed = 100
+var move_p = false
+var to_move = Vector2()
+var path = PoolVector2Array()
+var initialPosition = Vector2()
+
 signal was_selected
 signal was_deselected
 
@@ -37,7 +43,25 @@ func set_selected(value):
 		emit_signal("was_deselected", self)
 
 func _process(delta):	
+	if move_p:
+		path = get_viewport().get_node("World/nav").get_simple_path(position, to_move + Vector2(randi()%100, randi()%100))
+		initialPosition = position
+		move_p = false
+	if path.size() > 0:
+		move_towards(initialPosition, path[0], delta)
 	pass
+	
+func move_towards(pos, point, delta):
+	var v = (point - pos).normalized()
+	v *= delta * speed
+	position += v
+	if position.distance_squared_to(point) < 9:
+		path.remove(0)
+		initialPosition = position
+
+func move_unit(point):
+	to_move = point
+	move_p = true
 
 
 func _on_Unit_input_event(viewport, event, shape_idx):

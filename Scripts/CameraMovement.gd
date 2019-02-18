@@ -25,6 +25,8 @@ var endV = Vector2()
 var isDragging = false
 onready var rectangle = $'../UI/Base/Rect'
 signal area_selected
+
+var move_to_point = Vector2()
 signal start_move_selection
 
 func _ready():
@@ -83,6 +85,11 @@ func _process(delta):
 			end = start
 			isDragging = false
 			draw_area(false)
+	
+	if Input.is_action_just_released("ui_right_mouse_button"):
+		print("Start moving!")
+		move_to_point = mousePosGlobal
+		emit_signal("start_move_selection")
 	
 	pass
 
